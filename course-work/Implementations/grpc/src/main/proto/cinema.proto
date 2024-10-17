@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+option java_package = "com.grpc";
+option java_outer_classname = "CinemaProto";
+
+enum Genre {
+  UNKNOWN_GENRE = 0;
+  ACTION = 1;
+  COMEDY = 2;
+  DRAMA = 3;
+  HORROR = 4;
+  SCI_FI = 5;
+  ROMANCE = 6;
+}
+
+message Actor {
+  int32 id = 1;
+  string name = 2;
+  string nationality = 3;
+  string birth_date = 4;
+  double rating = 5;
+  bool alive = 6;
+  repeated string awards = 7;
+}
+
+message Movie {
+  int32 id = 1;
+  string title = 2;
+  Genre genre = 3;
+  string release_year = 4;
+  float duration_minutes = 5;
+  double rating = 6;
+}
+
+message TVSeries {
+  int32 id = 1;
+  string title = 2;
+  Genre genre = 3;
+  int32 seasons = 4;
+  bool ongoing = 5;
+  double rating = 6;
+}
+
+message CreateActorRequest {
+  Actor actor = 1;
+}
+
+message CreateActorResponse {
+  bool success = 1;
+  string message = 2;
+  Actor actor = 3;
+}
+
+message GetActorRequest {
+  int32 id = 1;
+}
+
+message GetActorResponse {
+  bool success = 1;
+  string message = 2;
+  Actor actor = 3;
+}
+
+message UpdateActorRequest {
+  Actor actor = 1;
+}
+
+message UpdateActorResponse {
+  bool success = 1;
+  string message = 2;
+  Actor actor = 3;
+}
+
+message DeleteActorRequest {
+  int32 id = 1;
+}
+
+message DeleteActorResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message CreateMovieRequest {
+  Movie movie = 1;
+}
+
+message CreateMovieResponse {
+  bool success = 1;
+  string message = 2;
+  Movie movie = 3;
+}
+
+message GetMovieRequest {
+  int32 id = 1;
+}
+
+message GetMovieResponse {
+  bool success = 1;
+  string message = 2;
+  Movie movie = 3;
+}
+
+message UpdateMovieRequest {
+  Movie movie = 1;
+}
+
+message UpdateMovieResponse {
+  bool success = 1;
+  string message = 2;
+  Movie movie = 3;
+}
+
+message DeleteMovieRequest {
+  int32 id = 1;
+}
+
+message DeleteMovieResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message CreateTVSeriesRequest {
+  TVSeries series = 1;
+}
+
+message CreateTVSeriesResponse {
+  bool success = 1;
+  string message = 2;
+  TVSeries series = 3;
+}
+
+message GetTVSeriesRequest {
+  int32 id = 1;
+}
+
+message GetTVSeriesResponse {
+  bool success = 1;
+  string message = 2;
+  TVSeries series = 3;
+}
+
+message UpdateTVSeriesRequest {
+  TVSeries series = 1;
+}
+
+message UpdateTVSeriesResponse {
+  bool success = 1;
+  string message = 2;
+  TVSeries series = 3;
+}
+
+message DeleteTVSeriesRequest {
+  int32 id = 1;
+}
+
+message DeleteTVSeriesResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+service CinemaService {
+  rpc CreateActor(CreateActorRequest) returns (CreateActorResponse);
+  rpc GetActor(GetActorRequest) returns (GetActorResponse);
+  rpc UpdateActor(UpdateActorRequest) returns (UpdateActorResponse);
+  rpc DeleteActor(DeleteActorRequest) returns (DeleteActorResponse);
+
+  rpc CreateMovie(CreateMovieRequest) returns (CreateMovieResponse);
+  rpc GetMovie(GetMovieRequest) returns (GetMovieResponse);
+  rpc UpdateMovie(UpdateMovieRequest) returns (UpdateMovieResponse);
+  rpc DeleteMovie(DeleteMovieRequest) returns (DeleteMovieResponse);
+
+  rpc CreateTVSeries(CreateTVSeriesRequest) returns (CreateTVSeriesResponse);
+  rpc GetTVSeries(GetTVSeriesRequest) returns (GetTVSeriesResponse);
+  rpc UpdateTVSeries(UpdateTVSeriesRequest) returns (UpdateTVSeriesResponse);
+  rpc DeleteTVSeries(DeleteTVSeriesRequest) returns (DeleteTVSeriesResponse);
+}

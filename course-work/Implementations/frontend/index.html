@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register/Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center h-screen">
+    <!-- Registration/Login Form -->
+    <div
+      class="w-full max-w-md bg-white shadow-lg rounded-lg p-6"
+      id="authForm"
+    >
+      <h2 class="text-2xl font-semibold text-center text-gray-800">
+        Register / Login
+      </h2>
+      <form class="mt-4">
+        <div class="mb-4">
+          <label for="username" class="block text-gray-700 font-medium"
+            >Username</label
+          >
+          <input
+            type="text"
+            id="username"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            placeholder="Enter username"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="password" class="block text-gray-700 font-medium"
+            >Password</label
+          >
+          <input
+            type="password"
+            id="password"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            placeholder="Enter password"
+          />
+        </div>
+        <div class="flex items-center justify-between mb-4">
+          <button
+            type="button"
+            onclick="login()"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md"
+          >
+            Login
+          </button>
+          <button
+            type="button"
+            onclick="register()"
+            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md"
+          >
+            Register
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Post-login: Dashboard with CRUD Options -->
+    <div
+      class="hidden w-full max-w-2xl bg-white shadow-lg rounded-lg p-6"
+      id="dashboard"
+    >
+      <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">
+        Manage Entities
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-blue-100 p-4 rounded-lg text-center">
+          <h3 class="font-semibold text-lg text-blue-800">Create</h3>
+          <button
+            class="mt-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+            onclick="showCreateForm('actor')"
+          >
+            New Actor
+          </button>
+          <button
+            class="mt-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+            onclick="showCreateForm('movie')"
+          >
+            New Movie
+          </button>
+          <button
+            class="mt-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+            onclick="showCreateForm('tv')"
+          >
+            New TV Series
+          </button>
+        </div>
+
+        <div class="bg-green-100 p-4 rounded-lg text-center">
+          <h3 class="font-semibold text-lg text-green-800">Read</h3>
+          <button
+            class="mt-2 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
+            onclick="showReadForm('actor')"
+          >
+            Get Actor
+          </button>
+          <button
+            class="mt-2 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
+            onclick="showReadForm('movie')"
+          >
+            Get Movie
+          </button>
+          <button
+            class="mt-2 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
+            onclick="showReadForm('tv')"
+          >
+            Get TV Series
+          </button>
+        </div>
+
+        <!-- <div class="bg-yellow-100 p-4 rounded-lg text-center">
+                <h3 class="font-semibold text-lg text-yellow-800">Update</h3>
+                <button class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-md" onclick="showUpdateForm('actor')">Update Actor</button>
+                <button class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-md" onclick="showUpdateForm('movie')">Update Movie</button>
+                <button class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-md" onclick="showUpdateForm('tv')">Update TV Series</button>
+            </div> -->
+
+        <div class="bg-red-100 p-4 rounded-lg text-center">
+          <h3 class="font-semibold text-lg text-red-800">Delete</h3>
+          <button
+            class="mt-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md"
+            onclick="showDeleteForm('actor')"
+          >
+            Delete Actor
+          </button>
+          <button
+            class="mt-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md"
+            onclick="showDeleteForm('movie')"
+          >
+            Delete Movie
+          </button>
+          <button
+            class="mt-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md"
+            onclick="showDeleteForm('tv')"
+          >
+            Delete TV Series
+          </button>
+        </div>
+      </div>
+
+      <!-- Create Forms -->
+      <div id="createForms" class="mt-6 hidden">
+        <div id="createActor" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Create Actor</h4>
+          <label for="actorName" class="block text-gray-700">Name</label>
+          <input
+            type="text"
+            id="actorName"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter actor name"
+          />
+          <label for="actorNationality" class="block text-gray-700"
+            >Nationality</label
+          >
+          <input
+            type="text"
+            id="actorNationality"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter actor nationality"
+          />
+          <label for="actorBirthDate" class="block text-gray-700"
+            >Birth Date</label
+          >
+          <input
+            type="date"
+            id="actorBirthDate"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <label for="actorRating" class="block text-gray-700">Rating</label>
+          <input
+            type="number"
+            id="actorRating"
+            min="1.00"
+            max="5.00"
+            step="0.01"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <div class="flex items-center mb-2">
+            <label for="actorAlive" class="text-gray-700">Alive</label>
+            <input
+              type="checkbox"
+              id="actorAlive"
+              class="ml-3 transform scale-150"
+            />
+          </div>
+          <button
+            class="mt-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+            onclick="createActor()"
+          >
+            Create Actor
+          </button>
+        </div>
+
+        <div id="createMovie" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Create Movie</h4>
+          <!-- Movie form fields -->
+          <label for="movieTitle" class="block text-gray-700">Title</label>
+          <input
+            type="text"
+            id="movieTitle"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter movie title"
+          />
+          <label for="movieGenre" class="block text-gray-700">Genre</label>
+          <select
+            id="movieGenre"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          >
+            <option value="ACTION">Action</option>
+            <option value="COMEDY">Comedy</option>
+            <option value="DRAMA">Drama</option>
+            <option value="HORROR">Horror</option>
+            <option value="SCI_FI">Sci-Fi</option>
+            <option value="ROMANCE">Romance</option>
+          </select>
+          <label for="movieDurationMinutes" class="block text-gray-700"
+            >Duration in minutes</label
+          >
+          <input
+            type="number"
+            id="movieDurationMinutes"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter minutes"
+          />
+          <label for="movieReleaseYear" class="block text-gray-700"
+            >Release Year</label
+          >
+          <input
+            type="date"
+            id="movieReleaseYear"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <label for="movieRating" class="block text-gray-700">Rating</label>
+          <input
+            type="number"
+            id="movieRating"
+            step="0.01"
+            min="1.00"
+            max="5.00"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <button
+            class="mt-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+            onclick="createMovie()"
+          >
+            Create Movie
+          </button>
+        </div>
+
+        <div id="createTv" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Create TV Series</h4>
+          <!-- TV Series form fields -->
+          <label for="tvTitle" class="block text-gray-700">Title</label>
+          <input
+            type="text"
+            id="tvTitle"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter TV Series title"
+          />
+          <label for="tvSeriesGenre" class="block text-gray-700">Genre</label>
+          <select
+            id="tvSeriesGenre"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          >
+            <option value="ACTION">Action</option>
+            <option value="COMEDY">Comedy</option>
+            <option value="DRAMA">Drama</option>
+            <option value="HORROR">Horror</option>
+            <option value="SCI_FI">Sci-Fi</option>
+            <option value="ROMANCE">Romance</option>
+          </select>
+          <label for="tvSeasons" class="block text-gray-700">Episodes</label>
+          <input
+            type="number"
+            id="tvSeasons"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter number of seasons"
+          />
+          <label for="tvReleaseDate" class="block text-gray-700"
+            >Release Date</label
+          >
+          <input
+            type="date"
+            id="tvReleaseDate"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <label for="tvRating" class="block text-gray-700">Rating</label>
+          <input
+            type="number"
+            id="tvRating"
+            min="1.00"
+            max="5.00"
+            step="0.01"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <div class="flex items-center mb-2">
+            <label for="tvOngoing" class="text-gray-700">Ongoing</label>
+            <input
+              type="checkbox"
+              id="tvOngoing"
+              class="ml-3 transform scale-150"
+            />
+          </div>
+          <button
+            class="mt-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+            onclick="createTv()"
+          >
+            Create TV Series
+          </button>
+        </div>
+      </div>
+
+      <!-- Read Forms -->
+      <div id="readForms" class="mt-6 hidden">
+        <div id="readActor" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Get Actor</h4>
+          <label for="getActorId" class="block text-gray-700">Actor ID</label>
+          <input
+            type="text"
+            id="getActorId"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter actor ID"
+          />
+          <button
+            class="mt-2 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
+            onclick="getActor()"
+          >
+            Fetch Actor
+          </button>
+          <div id="actorInfo" class="mt-4 text-gray-700"></div>
+        </div>
+
+        <div id="readMovie" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Get Movie</h4>
+          <label for="getMovieId" class="block text-gray-700">Movie ID</label>
+          <input
+            type="text"
+            id="getMovieId"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter movie ID"
+          />
+          <button
+            class="mt-2 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
+            onclick="getMovie()"
+          >
+            Fetch Movie
+          </button>
+          <div id="movieInfo" class="mt-4 text-gray-700"></div>
+        </div>
+
+        <div id="readTv" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Get TV Series</h4>
+          <label for="getTvId" class="block text-gray-700">TV Series ID</label>
+          <input
+            type="text"
+            id="getTvId"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter TV Series ID"
+          />
+          <button
+            class="mt-2 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
+            onclick="getTv()"
+          >
+            Fetch TV Series
+          </button>
+          <div id="tvInfo" class="mt-4 text-gray-700"></div>
+        </div>
+      </div>
+
+      <!-- Update Forms -->
+      <div id="updateForms" class="mt-6 hidden">
+        <div id="updateActor" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Update Actor</h4>
+          <label for="updatedActorName" class="block text-gray-700">Name</label>
+          <input
+            type="text"
+            id="updatedActorName"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter actor name"
+          />
+          <label for="updatedActorNationality" class="block text-gray-700"
+            >Nationality</label
+          >
+          <input
+            type="text"
+            id="updatedActorNationality"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter actor nationality"
+          />
+          <label for="updatedActorBirthDate" class="block text-gray-700"
+            >Birth Date</label
+          >
+          <input
+            type="date"
+            id="updatedActorBirthDate"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <label for="updatedActorRating" class="block text-gray-700"
+            >Rating</label
+          >
+          <input
+            type="number"
+            id="updatedActorRating"
+            min="1.00"
+            max="5.00"
+            step="0.01"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <div class="flex items-center mb-2">
+            <label for="updatedActorAlive" class="text-gray-700">Alive</label>
+            <input
+              type="checkbox"
+              id="updatedActorAlive"
+              class="ml-3 transform scale-150"
+            />
+          </div>
+          <button
+            class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-md"
+            onclick="updateActor()"
+          >
+            Update Actor
+          </button>
+        </div>
+
+        <div id="updateMovie" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Update Movie</h4>
+          <!-- Movie form fields -->
+          <label for="movieTitle" class="block text-gray-700">Title</label>
+          <input
+            type="text"
+            id="movieTitle"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter movie title"
+          />
+          <label for="movieGenre" class="block text-gray-700">Genre</label>
+          <select
+            id="movieGenre"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          >
+            <option value="ACTION">Action</option>
+            <option value="COMEDY">Comedy</option>
+            <option value="DRAMA">Drama</option>
+            <option value="HORROR">Horror</option>
+            <option value="SCI_FI">Sci-Fi</option>
+            <option value="ROMANCE">Romance</option>
+          </select>
+          <label for="movieDurationMinutes" class="block text-gray-700"
+            >Duration in minutes</label
+          >
+          <input
+            type="number"
+            id="movieDurationMinutes"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter minutes"
+          />
+          <label for="movieReleaseYear" class="block text-gray-700"
+            >Release Year</label
+          >
+          <input
+            type="date"
+            id="movieReleaseYear"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <label for="movieRating" class="block text-gray-700">Rating</label>
+          <input
+            type="number"
+            id="movieRating"
+            step="0.01"
+            min="1.00"
+            max="5.00"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <button
+            class="mt-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+            onclick="updateMovie()"
+          >
+            Update Movie
+          </button>
+        </div>
+
+        <div id="updateTv" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Update TV Series</h4>
+          <!-- TV Series form fields -->
+          <label for="tvTitle" class="block text-gray-700">Title</label>
+          <input
+            type="text"
+            id="tvTitle"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter TV Series title"
+          />
+          <label for="tvSeriesGenre" class="block text-gray-700">Genre</label>
+          <select
+            id="tvSeriesGenre"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          >
+            <option value="ACTION">Action</option>
+            <option value="COMEDY">Comedy</option>
+            <option value="DRAMA">Drama</option>
+            <option value="HORROR">Horror</option>
+            <option value="SCI_FI">Sci-Fi</option>
+            <option value="ROMANCE">Romance</option>
+          </select>
+          <label for="tvSeasons" class="block text-gray-700">Episodes</label>
+          <input
+            type="number"
+            id="tvSeasons"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter number of seasons"
+          />
+          <label for="tvReleaseDate" class="block text-gray-700"
+            >Release Date</label
+          >
+          <input
+            type="date"
+            id="tvReleaseDate"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <label for="tvRating" class="block text-gray-700">Rating</label>
+          <input
+            type="number"
+            id="tvRating"
+            min="1.00"
+            max="5.00"
+            step="0.01"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+          />
+          <div class="flex items-center mb-2">
+            <label for="tvOngoing" class="text-gray-700">Ongoing</label>
+            <input
+              type="checkbox"
+              id="tvOngoing"
+              class="ml-3 transform scale-150"
+            />
+          </div>
+          <button
+            class="mt-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+            onclick="updateTv()"
+          >
+            Update TV Series
+          </button>
+        </div>
+      </div>
+
+      <!-- Delete Forms -->
+      <div id="deleteForms" class="mt-6 hidden">
+        <div id="deleteActor" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Delete Actor</h4>
+          <label for="deleteActorId" class="block text-gray-700"
+            >Actor ID</label
+          >
+          <input
+            type="text"
+            id="deleteActorId"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter actor ID"
+          />
+          <button
+            class="mt-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md"
+            onclick="deleteActor()"
+          >
+            Delete Actor
+          </button>
+          <div id="deleteActorMessage" class="mt-4 text-gray-700"></div>
+        </div>
+
+        <div id="deleteMovie" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Delete Movie</h4>
+          <label for="deleteMovieId" class="block text-gray-700"
+            >Movie ID</label
+          >
+          <input
+            type="text"
+            id="deleteMovieId"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter movie ID"
+          />
+          <button
+            class="mt-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md"
+            onclick="deleteMovie()"
+          >
+            Delete Movie
+          </button>
+          <div id="deleteMovieMessage" class="mt-4 text-gray-700"></div>
+        </div>
+
+        <div id="deleteTv" class="bg-white p-4 rounded-lg mb-4 hidden">
+          <h4 class="font-semibold text-lg">Delete TV Series</h4>
+          <label for="deleteTvId" class="block text-gray-700"
+            >TV Series ID</label
+          >
+          <input
+            type="text"
+            id="deleteTvId"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
+            placeholder="Enter TV Series ID"
+          />
+          <button
+            class="mt-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md"
+            onclick="deleteTv()"
+          >
+            Delete TV Series
+          </button>
+          <div id="deleteTvMessage" class="mt-4 text-gray-700"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const requestBody = {
+          username: username,
+          password: password,
+        };
+
+        try {
+          const response = await fetch("http://localhost:8081/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestBody),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Login successful, token:", data.token);
+
+            if(data.token == null) {
+              alert("Login failed");
+              console.error("Login failed");
+              return;
+            }
+
+            localStorage.setItem("token", data.token);
+
+            document.getElementById("authForm").classList.add("hidden");
+            document.getElementById("dashboard").classList.remove("hidden");
+          } else {
+            console.error("Login failed");
+          }
+        } catch (error) {
+          console.error("Error during login:", error);
+        }
+      }
+
+      async function register() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const requestBody = {
+          username: username,
+          password: password,
+        };
+
+        try {
+          const response = await fetch("http://localhost:8081/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestBody),
+          });
+
+          if (response.ok) {
+            alert("Registration successful");
+            console.log("Registration successful");
+            
+            document.getElementById("username").value = '';
+            document.getElementById("password").value = '';
+          } else {
+            console.error("Registration failed");
+          }
+        } catch (error) {
+          console.error("Error during registration:", error);
+        }
+      }
+
+      function hideAllForms() {
+        document.getElementById("createActor").classList.add("hidden");
+        document.getElementById("createMovie").classList.add("hidden");
+        document.getElementById("createTv").classList.add("hidden");
+
+        document.getElementById("readActor").classList.add("hidden");
+        document.getElementById("readMovie").classList.add("hidden");
+        document.getElementById("readTv").classList.add("hidden");
+
+        document.getElementById("updateActor").classList.add("hidden");
+        document.getElementById("updateMovie").classList.add("hidden");
+        document.getElementById("updateTv").classList.add("hidden");
+
+        document.getElementById("deleteActor").classList.add("hidden");
+        document.getElementById("deleteMovie").classList.add("hidden");
+        document.getElementById("deleteTv").classList.add("hidden");
+      }
+
+      function showCreateForm(type) {
+        document.getElementById("createForms").style.display = "block";
+        hideAllForms();
+
+        if (type === "actor") {
+          document.getElementById("createActor").classList.remove("hidden");
+        } else if (type === "movie") {
+          document.getElementById("createMovie").classList.remove("hidden");
+        } else if (type === "tv") {
+          document.getElementById("createTv").classList.remove("hidden");
+        }
+      }
+
+      function showReadForm(type) {
+        document.getElementById("readForms").style.display = "block";
+        hideAllForms();
+
+        if (type === "actor") {
+          document.getElementById("readActor").classList.remove("hidden");
+        } else if (type === "movie") {
+          document.getElementById("readMovie").classList.remove("hidden");
+        } else if (type === "tv") {
+          document.getElementById("readTv").classList.remove("hidden");
+        }
+      }
+
+      function showUpdateForm(type, data) {
+        document.getElementById("updateForms").style.display = "block";
+        hideAllForms();
+
+        if (type === "actor") {
+          document.getElementById("updatedActorName").value = data.name;
+          document.getElementById("updatedActorNationality").value =
+            data.nationality;
+          document.getElementById("updatedActorBirthDate").value =
+            data.birthDate;
+          document.getElementById("updatedActorAlive").value = data.alive;
+          document.getElementById("updatedActorRating").value = data.rating;
+          document.getElementById("updateActor").classList.remove("hidden");
+        } else if (type === "movie") {
+          document.getElementById("updateMovie").classList.remove("hidden");
+        } else if (type === "tv") {
+          document.getElementById("updateTv").classList.remove("hidden");
+        }
+      }
+
+      function showDeleteForm(type) {
+        document.getElementById("deleteForms").style.display = "block";
+        hideAllForms();
+
+        if (type === "actor") {
+          document.getElementById("deleteActor").classList.remove("hidden");
+        } else if (type === "movie") {
+          document.getElementById("deleteMovie").classList.remove("hidden");
+        } else if (type === "tv") {
+          document.getElementById("deleteTv").classList.remove("hidden");
+        }
+      }
+
+      async function createActor() {
+        const name = document.getElementById("actorName").value;
+        const nationality = document.getElementById("actorNationality").value;
+        const birthDate = document.getElementById("actorBirthDate").value;
+        const alive = document.getElementById("actorAlive").checked;
+        const rating = document.getElementById("actorRating").value;
+
+        const requestBody = {
+          name: name,
+          nationality: nationality,
+          birthDate: birthDate,
+          alive: alive == "on" ? "true" : "false",
+          rating: rating,
+          awards: [],
+        };
+
+        try {
+          const response = await fetch("http://localhost:8081/cinema/actor", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+            body: JSON.stringify(requestBody),
+          });
+
+          if (response.ok) {
+            console.log("Actor created successfully");
+            alert("Actor created successfully");
+          } else {
+            console.error("Failed to create actor");
+            alert("Failed to create actor");
+          }
+        } catch (error) {
+          console.error("Error during actor creation:", error);
+          alert("Error during actor creation:", error);
+        }
+      }
+
+      async function createMovie() {
+        const title = document.getElementById("movieTitle").value;
+        const genre = document.getElementById("movieGenre").value;
+        const releaseYear = document.getElementById("movieReleaseYear").value;
+        const durationMinutes = document.getElementById(
+          "movieDurationMinutes"
+        ).value;
+        const rating = document.getElementById("movieRating").value;
+
+        const requestBody = {
+          title: title,
+          genre: genre,
+          releaseYear: releaseYear,
+          rating: rating,
+          durationMinutes: durationMinutes,
+        };
+
+        try {
+          const response = await fetch("http://localhost:8081/cinema/movie", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+            body: JSON.stringify(requestBody),
+          });
+
+          if (response.ok) {
+            console.log("Movie created successfully");
+            alert("Movie created successfully");
+          } else {
+            console.error("Failed to create movie");
+            alert("Failed to create movie");
+          }
+        } catch (error) {
+          console.error("Error during movie creation:", error);
+          alert("Error during movie creation:", error);
+        }
+      }
+
+      async function createTv() {
+        const title = document.getElementById("tvTitle").value;
+        const seasons = document.getElementById("tvSeasons").value;
+        const genre = document.getElementById("tvSeriesGenre").value;
+        const releaseDate = document.getElementById("tvReleaseDate").value;
+        const ongoing = document.getElementById("tvOngoing").checked;
+        const rating = document.getElementById("tvRating").value;
+
+        const requestBody = {
+          title: title,
+          seasons: seasons,
+          genre: genre,
+          rating: rating,
+          releaseDate: releaseDate,
+          ongoing: ongoing,
+        };
+
+        try {
+          const response = await fetch(
+            "http://localhost:8081/cinema/tvseries",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: JSON.stringify(requestBody),
+            }
+          );
+
+          if (response.ok) {
+            console.log("TV Series created successfully");
+            alert("Movie created successfully");
+          } else {
+            console.error("Failed to create TV Series");
+            alert("Failed to create TV Series");
+          }
+        } catch (error) {
+          console.error("Error during TV Series creation:", error);
+          alert("Error during TV Series creation:", error);
+        }
+      }
+
+      async function getActor() {
+        const actorId = document.getElementById("getActorId").value;
+
+        try {
+          console.log(localStorage.getItem("token"));
+          const response = await fetch(
+            `http://localhost:8081/cinema/actor/${actorId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
+          );
+
+          if (response.ok) {
+            const actor = await response.json();
+            showUpdateForm("actor", actor);
+          } else {
+            console.error("Failed to fetch actor");
+          }
+        } catch (error) {
+          console.error("Error fetching actor:", error);
+        }
+      }
+
+      async function getMovie() {
+        const movieId = document.getElementById("getMovieId").value;
+
+        try {
+          const response = await fetch(
+            `http://localhost:8081/cinema/movie/${movieId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
+          );
+
+          if (response.ok) {
+            const movie = await response.json();
+            document.getElementById("movieInfo").innerText = JSON.stringify(
+              movie,
+              null,
+              2
+            );
+          } else {
+            console.error("Failed to fetch movie");
+          }
+        } catch (error) {
+          console.error("Error fetching movie:", error);
+        }
+      }
+
+      async function getTv() {
+        const tvId = document.getElementById("getTvId").value;
+
+        try {
+          const response = await fetch(
+            `http://localhost:8081/cinema/tvseries/${tvId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
+          );
+
+          if (response.ok) {
+            const tvSeries = await response.json();
+            document.getElementById("tvInfo").innerText = JSON.stringify(
+              tvSeries,
+              null,
+              2
+            );
+          } else {
+            console.error("Failed to fetch TV series");
+          }
+        } catch (error) {
+          console.error("Error fetching TV series:", error);
+        }
+      }
+
+      async function updateTv() {
+        const id = document.getElementById("getTvId").value;
+        const title = document.getElementById("updatedTvTitle").value;
+        const seasons = document.getElementById("updatedTvSeasons").value;
+        const genre = document.getElementById("updatedTvSeriesGenre").value;
+        const releaseDate = document.getElementById(
+          "updatedTvReleaseDate"
+        ).value;
+        const ongoing = document.getElementById("updatedTvOngoing").checked;
+        const rating = document.getElementById("updatedTvRating").value;
+
+        const requestBody = {
+          id: id,
+          title: title,
+          seasons: seasons,
+          genre: genre,
+          rating: rating,
+          releaseDate: releaseDate,
+          ongoing: ongoing,
+        };
+
+        try {
+          const response = await fetch(
+            `http://localhost:8081/cinema/tvseries/${id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: JSON.stringify(requestBody),
+            }
+          );
+
+          if (response.ok) {
+            console.log("TV Series updated successfully");
+            alert("TV Series updated successfully");
+          } else {
+            console.error("Failed to update TV Series");
+            alert("Failed to update TV Series");
+          }
+        } catch (error) {
+          console.error("Error during TV Series update:", error);
+          alert("Error during TV Series update:", error);
+        }
+      }
+
+      async function updateMovie() {
+        const id = document.getElementById("getMovieId").value;
+        const title = document.getElementById("updatedMovieTitle").value;
+        const genre = document.getElementById("updatedMovieGenre").value;
+        const durationMinutes = document.getElementById(
+          "updatedMovieDuration"
+        ).value;
+        const releaseYear = document.getElementById(
+          "updatedMovieReleaseYear"
+        ).value;
+        const rating = document.getElementById("updatedMovieRating").value;
+
+        const requestBody = {
+          id: id,
+          title: title,
+          genre: genre,
+          durationMinutes: durationMinutes,
+          releaseYear: releaseYear,
+          rating: rating,
+        };
+
+        try {
+          const response = await fetch(
+            `http://localhost:8081/cinema/movie/${id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: JSON.stringify(requestBody),
+            }
+          );
+
+          if (response.ok) {
+            console.log("Movie updated successfully");
+            alert("Movie updated successfully");
+          } else {
+            console.error("Failed to update Movie");
+            alert("Failed to update Movie");
+          }
+        } catch (error) {
+          console.error("Error during Movie update:", error);
+          alert("Error during Movie update:", error);
+        }
+      }
+
+      async function updateActor() {
+        const id = document.getElementById("getActorId").value;
+        const name = document.getElementById("updatedActorName").value;
+        const nationality = document.getElementById(
+          "updatedActorNationality"
+        ).value;
+        const birthDate = document.getElementById(
+          "updatedActorBirthDate"
+        ).value;
+        const alive = document.getElementById("updatedActorAlive").checked;
+        const rating = document.getElementById("updatedActorRating").value;
+
+        const requestBody = {
+          id: id,
+          name: name,
+          nationality: nationality,
+          birthDate: birthDate,
+          alive: alive,
+          rating: rating,
+          awards: [],
+        };
+
+        try {
+          const response = await fetch(
+            `http://localhost:8081/cinema/actor/${id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: JSON.stringify(requestBody),
+            }
+          );
+
+          if (response.ok) {
+            console.log("Actor updated successfully");
+            alert("Actor updated successfully");
+          } else {
+            console.error("Failed to update Actor");
+            alert("Failed to update Actor");
+          }
+        } catch (error) {
+          console.error("Error during Actor update:", error);
+          alert("Error during Actor update:", error);
+        }
+      }
+
+      async function deleteActor() {
+        const actorId = document.getElementById("deleteActorId").value;
+
+        try {
+          const response = await fetch(
+            `http://localhost:8081/cinema/actor/${actorId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
+          );
+
+          if (response.ok) {
+            document.getElementById("deleteActorMessage").innerText =
+              "Actor deleted successfully";
+          } else {
+            console.error("Failed to delete actor");
+            document.getElementById("deleteActorMessage").innerText =
+              "Failed to delete actor";
+          }
+        } catch (error) {
+          console.error("Error deleting actor:", error);
+        }
+      }
+
+      async function deleteMovie() {
+        const movieId = document.getElementById("deleteMovieId").value;
+
+        try {
+          const response = await fetch(
+            `http://localhost:8081/cinema/movie/${movieId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
+          );
+
+          if (response.ok) {
+            document.getElementById("deleteMovieMessage").innerText =
+              "Movie deleted successfully";
+          } else {
+            console.error("Failed to delete movie");
+            document.getElementById("deleteMovieMessage").innerText =
+              "Failed to delete movie";
+          }
+        } catch (error) {
+          console.error("Error deleting movie:", error);
+        }
+      }
+
+      async function deleteTv() {
+        const tvId = document.getElementById("deleteTvId").value;
+
+        try {
+          const response = await fetch(
+            `http://localhost:8081/cinema/tvseries/${tvId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
+          );
+
+          if (response.ok) {
+            document.getElementById("deleteTvMessage").innerText =
+              "TV Series deleted successfully";
+          } else {
+            console.error("Failed to delete TV Series");
+            document.getElementById("deleteTvMessage").innerText =
+              "Failed to delete TV Series";
+          }
+        } catch (error) {
+          console.error("Error deleting TV Series:", error);
+        }
+      }
+    </script>
+  </body>
+</html>
